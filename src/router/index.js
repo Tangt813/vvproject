@@ -7,23 +7,12 @@ import TopNav from '@/components/nav/topNav.vue'
 import LeftNav from '@/components/nav/leftNav.vue'
 import Home from '@/views/home.vue'
 import Dashboard from '@/views/workbench/dashboard.vue'
-import MySettings from '@/views/workbench/mySettings.vue'
-import Mission from '@/views/workbench/mission/mission.vue'
-import Plan from '@/views/workbench/plan/plan.vue'
-import Maillist from '@/views/workbench/maillist.vue'
-import EnterpriseList from '@/views/enterprise/index.vue'
-import EnterpriseAdd from '@/views/enterprise/add.vue'
-import EnterpriseDetail from '@/views/enterprise/detail.vue'
-import EnterpriseValidate from '@/views/enterprise/validate.vue'
-import VehicleManage from '@/views/vehicle/index.vue'
-import DeptManager from '@/views/dept/index.vue'
-import NotFound from '@/components/404.vue'
 import pic2 from '@/views/pic/pic2.vue'
 import pic1 from '@/views/pic/pic1.vue'
 import pic3 from "../views/pic/pic3";
 import pic4 from "../views/pic/pic4";
 // 懒加载方式，当路由被访问的时候才加载对应组件
-const Login = resolve => require(['@/views/login'], resolve)
+// const Login = resolve => require(['@/views/login'], resolve)
 
 Vue.use(Router)
 
@@ -106,19 +95,19 @@ let router = new Router({
   ]
 });
 
-router.beforeEach((to, from, next) => {
-  // console.log('to:' + to.path)
-  if (to.path.startsWith('/login')) {
-    window.localStorage.removeItem('access-user')
-    next()
-  } else {
-    let user = JSON.parse(window.localStorage.getItem('access-user'))
-    if (!user) {
-      next({path: '/login'})
-    } else {
-      next()
-    }
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   // console.log('to:' + to.path)
+//   if (to.path.startsWith('/login')) {
+//     window.localStorage.removeItem('access-user')
+//     next()
+//   } else {
+//     let user = JSON.parse(window.localStorage.getItem('access-user'))
+//     if (!user) {
+//       next({path: '/login'})
+//     } else {
+//       next()
+//     }
+//   }
+// });
 
 export default router
