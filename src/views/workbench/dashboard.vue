@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%;width:100%;position:fixed;background:#81DAF5">
+  <div style="height:100%;width:100%;position:fixed;background:white">
     <div style="width:160px;border:0.2px solid #000;background:#81DAF5;text-align:center;margin-left:5px;margin-top:5px">
       <font style="color:white;text-align:center;width:100%">车辆实时信息</font>
       <div v-for="(car_data,i) in real_time_car_data" style="text-align:left;font-size:12px">

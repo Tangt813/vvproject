@@ -8,8 +8,28 @@
         <section class="chart-container">
           <el-row>
             <el-col :span="24">
-              <p align='center'>
-                <el-select v-model="areaValue" placeholder="功能区选择" @change="changeAreaValue">
+              <p>
+                <el-button style="margin-left: 100px;  color:#00C1DE; font-size: 20px ;"
+                           type="text" @click="upDialogFormVisible = true">参数调整
+                </el-button>
+                <el-dialog :visible.sync="upDialogFormVisible" title="可选择参数">
+                  <el-form :model="upForm">
+                    <el-form-item :label-width="formLabelWidth" label="参数名称1">
+                      <el-input v-model="upForm.name" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item :label-width="formLabelWidth" label="参数名称2">
+                      <el-select v-model="upForm.region" placeholder="请选择参数">
+                        <el-option label="参数1一" value="shanghai"></el-option>
+                        <el-option label="参数1二" value="beijing"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-form>
+                  <el-row  type="flex" justify="end">
+                    <el-button @click="upDialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="upDialogFormVisible = false">确 定</el-button>
+                  </el-row>
+                </el-dialog>
+                <el-select v-model="areaValue" placeholder="功能区选择" style="margin-left: 35%" @change="changeAreaValue">
                   <el-option
                     v-for="item in areaOptions"
                     :key="item.value"
@@ -23,8 +43,29 @@
 
             </el-col>
             <el-col :span="24">
-              <p align='center'>
-                <el-select v-model="areaValue2" placeholder="功能区选择" @change="changeAreaValue">
+              <p>
+                <el-button style="margin-left: 100px;  color:#00C1DE; font-size: 20px ;"
+                           type="text" @click="downDialogFormVisible = true">参数调整
+                </el-button>
+                <el-dialog :visible.sync="downDialogFormVisible" title="可选择参数">
+                  <el-form :model="downForm">
+                    <el-form-item :label-width="formLabelWidth" label="参数名称1">
+                      <el-input v-model="downForm.name" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item :label-width="formLabelWidth" label="参数名称2">
+                      <el-select v-model="downForm.region" placeholder="请选择参数">
+                        <el-option label="参数2一" value="shanghai"></el-option>
+                        <el-option label="参数2二" value="beijing"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-form>
+                  <el-row  type="flex" justify="end">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                  </el-row>
+                </el-dialog>
+
+                <el-select v-model="areaValue2" placeholder="功能区选择" style="margin-left: 35%" @change="changeAreaValue">
                   <el-option
                     v-for="item in areaOptions"
                     :key="item.value"
@@ -51,6 +92,32 @@ export default {
   data() {
 
     return {
+      downDialogTableVisible: false,
+      downDialogFormVisible: false,
+      downForm: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+
+      upDialogTableVisible: false,
+      upDialogFormVisible: false,
+      upForm: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      formLabelWidth: '120px',
       //数据
       upId: [],
       upAllChangeUpKwh: [],
@@ -363,9 +430,6 @@ export default {
   mounted() {
     this.drawShape();
     this.changeAreaValue();
-    // this.changeTimeValue();
-    // this.changeStationValue();
-    // this.changeTimeValue2();
   },
   methods: {
     //函数
@@ -601,9 +665,9 @@ export default {
     changeAreaValue() {
       let that = this;
       that.upperOption.xAxis.data = that.upId;
-      that.downOption.xAxis.data=that.downId;
+      that.downOption.xAxis.data = that.downId;
       var upTempSeries = [];
-      var downTempSeries=[];
+      var downTempSeries = [];
       var upTempLegend = [
         {
           top: "4%",

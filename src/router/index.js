@@ -22,8 +22,8 @@ let router = new Router({
       path: '/',
       type: 'home',
       name: 'home',
-      redirect: '/dashboard',
       component: Home,
+      redirect:'/dashboard',
       children: [
         {
           path: '/dashboard',
@@ -85,8 +85,33 @@ let router = new Router({
           },
           name: '协同优化调度',
           iconCls: 'el-icon-menu',
-          leaf: true, // 只有一个节点
-          menuShow: true
+          leaf: false, // 只有一个节点
+          menuShow: true,
+          children:
+          [{
+            path: '/pic3',
+            components: {
+              default: pic3,
+              top: TopNav,
+              aside: LeftNav
+            },
+            name: '协同优化调度子项1',
+            iconCls: 'el-icon-menu',
+            leaf: true, // 只有一个节点
+            menuShow: true
+          },
+            {
+              path: '/pic3',
+              components: {
+                default: pic3,
+                top: TopNav,
+                aside: LeftNav
+              },
+              name: '协同优化调度子项2',
+              iconCls: 'el-icon-menu',
+              leaf: true, // 只有一个节点
+              menuShow: true
+            }]
 
         }
 

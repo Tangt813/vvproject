@@ -76,7 +76,7 @@
       };
     },
     created() {
-      let reg_user = JSON.parse(window.localStorage.getItem('register-user'));
+      let reg_user = JSON.parse(window.localdStorage.getItem('register-user'));
       if (reg_user) {
         this.account.username = reg_user.username;
         this.account.pwd = '';
