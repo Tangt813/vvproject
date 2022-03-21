@@ -11,6 +11,8 @@ import pic2 from '@/views/pic/pic2.vue'
 import pic1 from '@/views/pic/pic1.vue'
 import pic3 from "../views/pic/pic3";
 import pic4 from "../views/pic/pic4";
+import pic4Subitem1 from "../views/pic/pic4Subitem/pic4Subitem1";
+import pic4Subitem2 from "../views/pic/pic4Subitem/pic4Subitem2";
 // 懒加载方式，当路由被访问的时候才加载对应组件
 // const Login = resolve => require(['@/views/login'], resolve)
 
@@ -85,31 +87,27 @@ let router = new Router({
           },
           name: '协同优化调度',
           iconCls: 'el-icon-menu',
-          leaf: false, // 只有一个节点
+          leaf:false,
           menuShow: true,
           children:
           [{
-            path: '/pic3',
+            path: '/pic4/pic4Subitem1',
             components: {
-              default: pic3,
+              default: pic4Subitem1,
               top: TopNav,
               aside: LeftNav
             },
             name: '协同优化调度子项1',
-            iconCls: 'el-icon-menu',
-            leaf: true, // 只有一个节点
             menuShow: true
           },
             {
-              path: '/pic3',
+              path: '/pic4/pic4Subitem2',
               components: {
-                default: pic3,
+                default: pic4Subitem2,
                 top: TopNav,
                 aside: LeftNav
               },
               name: '协同优化调度子项2',
-              iconCls: 'el-icon-menu',
-              leaf: true, // 只有一个节点
               menuShow: true
             }]
 
