@@ -115,7 +115,9 @@ export default{
         },
         backgroundColor:'#1b1b1b',
         tooltip: {
-            trigger: 'item'
+            trigger: 'item',
+    
+         
         },
         toolbox: {
             show: true,
@@ -412,6 +414,7 @@ var opts = {
     title : "网站信息" , // 信息窗口标题
     enableMessage:true//设置允许信息窗发送短息
 };
+var infoWindows = [BMap.infoWindow];
 for(var i=0;i<data_info.length;i++){
     // var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
     var content = data_info[i][2];
@@ -439,13 +442,39 @@ for(var i=0;i<data_info.length;i++){
     //     var marker2 = new BMap.Marker(pt,{icon:myIcon1});
     //     map.addOverlay(marker2);
     // }else
+      
     if(data_info[i][3] == 0){
         var marker2 = new BMap.Marker(pt,{icon:carIcon});
+     
+      
+     
+        marker2.addEventListener("click",(e)=>{
+            var ops={
+          width:250,
+          title:"车辆实时信息"
+        }
+          var infoWindow = new BMap.InfoWindow("A1车 行驶<br>容量40kWh,SOC98%<br>位置("+e.target.point.lng+","+e.target.point.lat+")",ops)
+          map.openInfoWindow(infoWindow,e.target.point);
+        })
+      
         map.addOverlay(marker2);
     }else if(data_info[i][3] == -1){
         var marker2 = new BMap.Marker(pt,{icon:chargeIcon});
+        
+       
+    
+        marker2.addEventListener("click",(e)=>{
+           var ops={
+          width:250,
+          title:"充电站实时信息"
+        }
+           var infoWindow = new BMap.InfoWindow("a1站 桩数12<br>使用率50%<br>功率360kw<br>位置("+e.target.point.lng+","+e.target.point.lat+")",ops)
+
+          map.openInfoWindow(infoWindow,e.target.point);
+        })
         map.addOverlay(marker2);
     }
+
     // this.top_bar(series_data1);
     // this.addClickHandler(series_data1,series_data2,content,marker2);
 }
