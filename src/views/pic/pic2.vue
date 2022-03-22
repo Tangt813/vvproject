@@ -68,7 +68,7 @@
 </template>
 <script>
 import echarts from 'echarts'
-import axios from "_axios@0.18.1@axios";
+import axios from 'axios'
 
 export default {
 
