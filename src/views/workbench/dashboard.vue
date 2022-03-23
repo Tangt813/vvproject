@@ -215,14 +215,6 @@ export default{
         map.addOverlay(ply1);
       });
 
-
-      //   var res = [{"count": 61, "lat": 30.262180897456524, "lng":120.18841266632081},
-      //               {"count": 100, "lat": 30.208457, "lng":120.21189800000002},
-      //               {"count": 70, "lat": 30.183806, "lng":120.26425300000005}];
-      //   var heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
-      //   map.addOverlay(heatmapOverlay);
-      // //调整max的值效果会不一样，但count值一定要在max值之内
-      //   heatmapOverlay.setDataSet({data: res,max:100});
       var data_info = [
         [114.502461,38.045474,"网站名称：市住房公积金管理中心;网站ip:192.168.1.100;网站URL:www.jdin.com;",30,[3,2,3,4],[3,4,3,7,2]],
         [120.153576,29.287459,"网站名称：浙江省嘉兴市第一中学<br>网站ip:192.168.1.100<br>网站URL:www.jdin.com",91,[4,2,3,4],[3,4,6,5,2]],
@@ -417,35 +409,22 @@ export default{
       var infoWindows = [BMap.infoWindow];
       for(var i=0;i<data_info.length;i++){
         // var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
-        var content = data_info[i][2];
-        var series_data1 = data_info[i][4];
-        var series_data2 = data_info[i][5];
+        // var content = data_info[i][2];
+        // var series_data1 = data_info[i][4];
+        // var series_data2 = data_info[i][5];
         // console.log(series_data);
         var pt = new BMap.Point(data_info[i][0],data_info[i][1]);
         if(data_info[i][3] == -1){
           pt = new BMap.Point(data_info[i][1],data_info[i][0]);
         }
-        // var myIcon = new BMap.Icon(require("../../assets/images/marker_yellow.png") , new BMap.Size(30,30));
-        // var myIcon1 = new BMap.Icon(require("../../assets/images/marker_green.png") , new BMap.Size(30,30));
-        // var myIcon2 = new BMap.Icon(require("../../assets/images/marker_red.png") , new BMap.Size(30,30));
-        var carIcon = new BMap.Icon(require("../../assets/images/car.png") , new BMap.Size(70,30));
-        var chargeIcon = new BMap.Icon(require("../../assets/images/charge.png") , new BMap.Size(43,50));
+        var carIcon = new BMap.Icon(require("../../assets/images/汽车俯视图.svg") , new BMap.Size(40,40));
+        carIcon.opacity=0.5;
 
-        // if(data_info[i][3] <= 60 && data_info[i][3] > 0){
-        //     var marker2 = new BMap.Marker(pt,{icon:myIcon2});
-        //     map.addOverlay(marker2);
-        //     marker2.setAnimation(BMAP_ANIMATION_BOUNCE);
-        // }else if(data_info[i][3] >= 60 && data_info[i][3] < 80){
-        //     var marker2 = new BMap.Marker(pt,{icon:myIcon});
-        //     map.addOverlay(marker2);
-        // }else if(data_info[i][3] >= 80 && data_info[i][3] <= 100){
-        //     var marker2 = new BMap.Marker(pt,{icon:myIcon1});
-        //     map.addOverlay(marker2);
-        // }else
+        var chargeIcon = new BMap.Icon(require("../../assets/images/充电站.svg") , new BMap.Size(40,40));
+
 
         if(data_info[i][3] == 0){
           var marker2 = new BMap.Marker(pt,{icon:carIcon});
-
 
 
           marker2.addEventListener("click",(e)=>{
@@ -458,8 +437,10 @@ export default{
           })
 
           map.addOverlay(marker2);
-        }else if(data_info[i][3] == -1){
+        }
+        else if(data_info[i][3] == -1){
           var marker2 = new BMap.Marker(pt,{icon:chargeIcon});
+
 
 
 

@@ -10,7 +10,7 @@
 
             <el-col :span="24">
               <p align='center'>
-                <el-select v-model="areaValue" placeholder="行政区选择" @change="changeCityOption(this.areaValue.label,this.timeValue.label)">
+                <el-select v-model="areaValue" placeholder="行政区选择" @change="changeCityAreaOption">
                   <el-option
                     v-for="item in areaOption"
                     :key="item.value"
@@ -22,7 +22,7 @@
                   v-model="timeValue"
                   placeholder="时间尺度选择"
                   style="margin-left: 20px;"
-                  @change="changeCityOption(this.areaValue.label,this.timeValue.label)">
+                  @change="changeCityAreaOption">
                   <el-option
                     v-for="item in timeOptions"
                     :key="item.value"
@@ -38,7 +38,7 @@
             <el-col :span="24">
               <div></div>
               <p align='center'>
-                <el-select v-model="stationValue" placeholder="充电站选择" style="width: 400px; "@change="changeChargeStationOption(this.stationValue.label,this.timeValue2.label)" >
+                <el-select v-model="stationValue" placeholder="充电站选择" style="width: 400px; "@change="changeChargeStationOption" >
                   <el-option
                     v-for="item in stationOptions"
                     :key="item.value"
@@ -50,7 +50,7 @@
                   v-model="timeValue2"
                   placeholder="时间尺度选择"
                   style="margin-left: 20px;"
-                  @change="changeChargeStationOption(this.stationValue.label,this.timeValue2.label)" >
+                  @change="changeChargeStationOption" >
                   <el-option
                     v-for="item in timeOptions"
                     :key="item.value"
@@ -118,15 +118,11 @@ export default {
       timeOptions: [
         {
         value: '1',
-        label: '周'
+        label: '日'
       }, {
         value: '2',
-        label: '日'
-      },
-        {
-          value: '3',
-          label: '小时'
-        }],
+        label: '小时'
+      }],
       stationOptions: [
         {
         value: '1',
@@ -517,16 +513,29 @@ export default {
   },
   mounted() {
     this.drawShape();
-    this.changeCityOption(cityArea, time);
-    this.changeChargeStationOption(chargeStation,time);
+    this.changeCityAreaOption();
+    this.changeChargeStationOption();
 
   },
   methods: {
-    changeCityOption( cityArea, time)
+    changeCityAreaOption()
     {
       let that = this;
-      let url = "http://1.117.40.47:8082/app/v1/CityAreaPredict";
-      url+="?cityArea='"+cityArea+"'&time='"+time+"'";
+      var cityArea= that.areaOption[that.areaValue-1].label;
+      var time=that.timeOptions[that.timeValue-1].label;
+      // console.log(cityArea);
+      // console.log(time);
+      let url="";
+      if(time=="日")
+      {
+        // console.log("yes");
+        url= "http://1.117.40.47:8082/app/v1/CityAreaPredict";
+      }
+      else
+      {
+        url="http://1.117.40.47:8082/app/v1/CityAreaPredict";
+      }
+      url+="?cityArea='"+cityArea;
       //TODO:url
       axios.get(url).then(function (res) {
         that.weekId = res.data.time;
@@ -553,11 +562,24 @@ export default {
         that.cityAreaChart.setOption(that.cityAreaOption);
       })
     },
-    changeChargeStationOption(chargeStation,time)
+    changeChargeStationOption()
     {
+
       let that = this;
-      let url = "http://1.117.40.47:8082/app/v1/DayPredictLoad";
-      url+="?chargeStation='"+chargeStation+"'&time='"+time+"'";
+      var chargeStation= that.stationOptions[that.stationValue-1].label;
+      var time=that.timeOptions[that.timeValue2-1].label;
+
+      let url="";
+      if(time=="日")
+      {
+
+        url= "http://1.117.40.47:8082/app/v1/CityAreaPredict";
+      }
+      else
+      {
+        url="http://1.117.40.47:8082/app/v1/CityAreaPredict";
+      }
+      url+="?chargeStation='"+chargeStation+"'";
       //TODO:url
       axios.get(url).then(function (res) {
         that.dayId = res.data.time;
@@ -590,7 +612,7 @@ export default {
     initCityAreaData() {
       let that = this;
       let url = "http://1.117.40.47:8082/app/v1/CityAreaPredict";
-      url+="?cityArea='上城区'&time='日'";
+      url+="?cityArea='上城区'";
       //TODO:url
       axios.get(url).then(function (res) {
         that.weekId = res.data.time;
@@ -620,7 +642,7 @@ export default {
     initChargeStationData() {
       let that = this;
       let url = "http://1.117.40.47:8082/app/v1/DayPredictLoad";
-      url+=url+="?chargeStation='杭新景高速建德服务区充电站(衢州方向)'&time='日'";
+      url+=url+="?chargeStation='杭新景高速建德服务区充电站(衢州方向)'";
       //TODO:url
       axios.get(url).then(function (res) {
         that.dayId = res.data.time;
