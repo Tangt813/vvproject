@@ -1,16 +1,16 @@
 <template>
   <el-row class="wrap">
     <el-col :span="24" class="wrap-breadcrumb">
-<!--      <el-breadcrumb seporate="/">-->
-<!--        <el-breadcrumb-item :to="{ path: '/'}"><b>首页</b></el-breadcrumb-item>-->
-<!--      </el-breadcrumb>-->
+      <!--      <el-breadcrumb seporate="/">-->
+      <!--        <el-breadcrumb-item :to="{ path: '/'}"><b>首页</b></el-breadcrumb-item>-->
+      <!--      </el-breadcrumb>-->
       <el-col :span="24" class="wrap-main">
         <section class="chart-container">
           <el-row>
 
             <el-col :span="24">
               <p align='center'>
-                <el-select v-model="areaValue" placeholder="功能区选择">
+                <el-select v-model="areaValue" placeholder="行政区选择" @change="changeCityOption(this.areaValue.label,this.timeValue.label)">
                   <el-option
                     v-for="item in areaOption"
                     :key="item.value"
@@ -20,8 +20,9 @@
                 </el-select>
                 <el-select
                   v-model="timeValue"
+                  placeholder="时间尺度选择"
                   style="margin-left: 20px;"
-                  placeholder="时间尺度选择">
+                  @change="changeCityOption(this.areaValue.label,this.timeValue.label)">
                   <el-option
                     v-for="item in timeOptions"
                     :key="item.value"
@@ -31,13 +32,13 @@
                 </el-select>
 
               </p>
-              <div id="seasonChart" style="width: 100%; height: 600px;"></div>
-<!--              <div><img src="./图片1.png"></div>-->
+              <div id="cityAreaChart" style="width: 100%; height: 600px;"></div>
+              <!--              <div><img src="./图片1.png"></div>-->
             </el-col>
             <el-col :span="24">
               <div></div>
               <p align='center'>
-                <el-select v-model="stationValue" placeholder="充电站选择">
+                <el-select v-model="stationValue" placeholder="充电站选择" style="width: 400px; "@change="changeChargeStationOption(this.stationValue.label,this.timeValue2.label)" >
                   <el-option
                     v-for="item in stationOptions"
                     :key="item.value"
@@ -47,8 +48,9 @@
                 </el-select>
                 <el-select
                   v-model="timeValue2"
+                  placeholder="时间尺度选择"
                   style="margin-left: 20px;"
-                  placeholder="时间尺度选择">
+                  @change="changeChargeStationOption(this.stationValue.label,this.timeValue2.label)" >
                   <el-option
                     v-for="item in timeOptions"
                     :key="item.value"
@@ -57,8 +59,8 @@
                   </el-option>
                 </el-select>
               </p>
-              <div id="dayChart" style="width: 100%; height: 600px;"></div>
-<!--              <div><img src="./图片2.png"></div>-->
+              <div id="chargeStationChart" style="width: 100%; height: 600px;"></div>
+              <!--              <div><img src="./图片2.png"></div>-->
             </el-col>
           </el-row>
         </section>
@@ -75,28 +77,46 @@ export default {
   data() {
     return {
       //数据
-      weekId:[],
-      weekPredict:[],
-      weekActual:[],
-      dayId:[],
-      dayPredict:[],
-      dayActual:[],
-
-      areaOption: [{
+      weekId: [],
+      weekPredict: [],
+      weekActual: [],
+      dayId: [],
+      dayPredict: [],
+      dayActual: [],
+      //3个下拉框
+      areaOption: [
+        {
         value: '1',
-        label: '居民区'
+        label: '上城区'
       }, {
         value: '2',
-        label: '工作区'
+        label: '下城区'
       },
         {
-        value: '3',
-        label: '商业区'
-      }, {
-        value: '4',
-        label: '景区'
-      }],
-      timeOptions: [{
+          value: '3',
+          label: '临安区'
+        }, {
+          value: '4',
+          label: '余杭区'
+        }, {
+          value: '5',
+          label: '拱墅区'
+        }, {
+          value: '6',
+          label: '江干区'
+        }, {
+          value: '7',
+          label: '滨江区'
+        }
+        , {
+          value: '8',
+          label: '萧山区'
+        }, {
+          value: '9',
+          label: '西湖区'
+        }],
+      timeOptions: [
+        {
         value: '1',
         label: '周'
       }, {
@@ -107,23 +127,240 @@ export default {
           value: '3',
           label: '小时'
         }],
-      stationOptions:[{
+      stationOptions: [
+        {
         value: '1',
-        label: '充电站1'
+        label: '杭新景高速建德服务区充电站(衢州方向)'
       }, {
         value: '2',
-        label: '充电站2'
-      },
-        {
-          value: '3',
-          label: '充电站3'
-        },{
+        label: '杭新景高速桐庐服务区充电站(杭州方向)'
+      }, {
+        value: '3',
+        label: '杭新景高速桐庐服务区充电站(衢州方向)'
+      }, {
           value: '4',
-          label: '充电站4'
+          label: '上城区五柳巷充电站'
+        }, {
+          value: '5',
+          label: '上城区嘉里中心充电站'
+        }, {
+          value: '6',
+          label: '下城区中大银泰城充电站'
+        }, {
+          value: '7',
+          label: '下城区和平广场充电站'
+        }, {
+          value: '8',
+          label: '下城区石桥路北充电站'
+        }, {
+          value: '9',
+          label: '临安区临安工会充电站'
+        }, {
+          value: '10',
+          label: '临安区岗阳充电站'
+        }, {
+          value: '11',
+          label: '临安区行政服务中心充电站'
+        }, {
+          value: '12',
+          label: '临安区西站公交充电站'
+        }, {
+          value: '13',
+          label: '余杭区上亿广场充电站'
+        }, {
+          value: '14',
+          label: '余杭区世纪公园充电站'
+        }, {
+          value: '15',
+          label: '余杭区乔司街道办事处充电站'
+        }, {
+          value: '16',
+          label: '余杭区余杭人民大道充电站'
+        }, {
+          value: '17',
+          label: '余杭区南苑西子充电站'
+        }, {
+          value: '18',
+          label: '余杭区卧龙浜公园充电站'
+        }, {
+          value: '19',
+          label: '余杭区大径山旅游集散中心充电站'
+        }, {
+          value: '20',
+          label: '余杭区瓶窑镇政府充电站'
+        }, {
+          value: '21',
+          label: '余杭区良渚劝学里充电站'
+        }, {
+          value: '22',
+          label: '余杭区良渚博物院停车场充电站'
+        }, {
+          value: '23',
+          label: '余杭区赞成赞城充电站'
+        }, {
+          value: '24',
+          label: '大江东义蓬歌剧院充电站'
+        }, {
+          value: '25',
+          label: '大江东前进充电站'
+        }, {
+          value: '26',
+          label: '大江东新湾小学充电站'
+        }, {
+          value: '27',
+          label: '大江东河庄充电站'
+        }, {
+          value: '28',
+          label: '大江东河庄文体中心充电站'
+        }, {
+          value: '29',
+          label: '大江东老九中停车场充电站'
+        }, {
+          value: '30',
+          label: '富阳区中石化银湖充电站'
+        }, {
+          value: '31',
+          label: '富阳区体育中心充电站'
+        }, {
+          value: '32',
+          label: '富阳区行政服务中心充电站'
+        }, {
+          value: '33',
+          label: '富阳区首创奥特莱斯充电站'
+        }, {
+          value: '34',
+          label: '建德市白沙充电站'
+        }, {
+          value: '35',
+          label: '拱墅区储鑫路充电站'
+        }, {
+          value: '36',
+          label: '拱墅区广银大酒店充电站'
+        }, {
+          value: '37',
+          label: '拱墅区行政服务中心充电站'
+        }, {
+          value: '38',
+          label: '拱墅区西塘桥充电站'
+        }, {
+          value: '39',
+          label: '拱墅区阮家桥充电站'
+        }, {
+          value: '40',
+          label: '桐庐县南门社区充电站'
+        }, {
+          value: '41',
+          label: '桐庐县富春江励骏酒店充电站'
+        }, {
+          value: '42',
+          label: '桐庐县桐庐供电营业厅充电站'
+        }, {
+          value: '43',
+          label: '桐庐县桐庐红楼之星充电站'
+        }, {
+          value: '44',
+          label: '江干区石德立交充电站'
+        }, {
+          value: '45',
+          label: '江干区香樟街充电站'
+        }, {
+          value: '46',
+          label: '淳安县千岛湖汽车北站公交充电站'
+        }, {
+          value: '47',
+          label: '淳安县千岛湖珍珠广场直流充电站'
+        }, {
+          value: '48',
+          label: '淳安县千岛湖花海明月充电站'
+        }, {
+          value: '49',
+          label: '淳安县千岛湖镇鼓山充电站'
+        }, {
+          value: '50',
+          label: '滨江区中兴花园充电站'
+        }, {
+          value: '51',
+          label: '滨江区地铁江陵路充电站'
+        }, {
+          value: '52',
+          label: '滨江区地铁滨康路充电站'
+        }, {
+          value: '53',
+          label: '滨江区地铁西兴站充电站'
+        }, {
+          value: '54',
+          label: '滨江区彩虹充电站'
+        }, {
+          value: '55',
+          label: '滨江区星光大道充电站'
+        }, {
+          value: '56',
+          label: '滨江区缤纷小区充电站'
+        }, {
+          value: '57',
+          label: '萧山区宝盛世纪中心充电站'
+        }, {
+          value: '58',
+          label: '萧山区成虎桥停车场充电站'
+        }, {
+          value: '59',
+          label: '萧山区湘湖充电站'
+        }, {
+          value: '60',
+          label: '萧山区萧山国际机场充电站'
+        }, {
+          value: '61',
+          label: '萧山区钱江供电所充电站'
+        }, {
+          value: '62',
+          label: '萧山区高桥路充电站'
+        }, {
+          value: '63',
+          label: '西湖区三墩出租车服务区充电站'
+        }, {
+          value: '64',
+          label: '西湖区上城埭充电站'
+        }, {
+          value: '65',
+          label: '西湖区中石化古荡充电站'
+        }, {
+          value: '66',
+          label: '西湖区云栖小镇充电站'
+        }, {
+          value: '67',
+          label: '西湖区兰溪口充电站'
+        }, {
+          value: '68',
+          label: '西湖区印象城购物中心充电站'
+        }, {
+          value: '69',
+          label: '西湖区周浦农贸市场充电站'
+        }, {
+          value: '70',
+          label: '西湖区玉皇山公园充电站'
+        }, {
+          value: '71',
+          label: '西湖区留下农贸市场充电站'
+        }, {
+          value: '72',
+          label: '西湖区芦荡公园充电站'
+        }, {
+          value: '73',
+          label: '西湖区茅家埠农贸市场充电站'
+        }, {
+          value: '74',
+          label: '西湖区西湖行政服务中心之江充电站'
+        }, {
+          value: '75',
+          label: '西湖区转塘小商品市场充电站'
+        }, {
+          value: '76',
+          label: '西湖区黄龙洞充电站'
         }],
-      seasonOption : {
+      //2个图
+      cityAreaOption: {
         title: {
-          text: '景区_季度周负荷预测'
+          text: '城区_充电负荷预测'
         },
         tooltip: {
           trigger: 'axis'
@@ -193,9 +430,9 @@ export default {
           }
         ]
       },
-      dayOption : {
+      chargeStationOption: {
         title: {
-          text: '景区_日负荷预测'
+          text: '充电站_充电负荷预测'
         },
         tooltip: {
           trigger: 'axis'
@@ -267,33 +504,38 @@ export default {
         ]
 
       },
+
       areaValue: '1',
-      timeValue: '1',
+      timeValue: '2',
       stationValue: '1',
-      timeValue2: '1'
+      timeValue2: '2'
     }
   },
   created() {
-    this.initWeekData();
-    this.initDayData();
+    this.initCityAreaData();
+    this.initChargeStationData();
   },
   mounted() {
     this.drawShape();
+    this.changeCityOption(cityArea, time);
+    this.changeChargeStationOption(chargeStation,time);
+
   },
   methods: {
-    initWeekData()
+    changeCityOption( cityArea, time)
     {
       let that = this;
-      let url ="http://1.117.40.47:8082/app/v1/SeasonPredictLoad";
+      let url = "http://1.117.40.47:8082/app/v1/CityAreaPredict";
+      url+="?cityArea='"+cityArea+"'&time='"+time+"'";
       //TODO:url
-      axios.get(url).then(function (res){
-        that.weekId=res.data.time;
-        that.weekPredict=res.data.predictSum;
-        that.weekActual=res.data.actualSum;
-        that.seasonChart = echarts.init(document.getElementById('seasonChart'));
-        that.seasonOption.xAxis.data = that.weekId;
-        that.seasonOption.title.text = '景区_季度周负荷预测';
-        var tempSeries=[
+      axios.get(url).then(function (res) {
+        that.weekId = res.data.time;
+        that.weekPredict = res.data.predictSum;
+        that.weekActual = res.data.actualSum;
+        that.cityAreaChart = echarts.init(document.getElementById('cityAreaChart'));
+        that.cityAreaOption.xAxis.data = that.weekId;
+        that.cityAreaOption.title.text = '城区_充电负荷预测';
+        var tempSeries = [
           {
             name: 'actual',
             type: 'line',
@@ -307,23 +549,24 @@ export default {
             data: that.weekPredict
           }
         ];
-        that.seasonOption.series = tempSeries;
-        that.seasonChart.setOption(that.seasonOption);
+        that.cityAreaOption.series = tempSeries;
+        that.cityAreaChart.setOption(that.cityAreaOption);
       })
     },
-    initDayData()
+    changeChargeStationOption(chargeStation,time)
     {
       let that = this;
-      let url ="http://1.117.40.47:8082/app/v1/DayPredictLoad";
+      let url = "http://1.117.40.47:8082/app/v1/DayPredictLoad";
+      url+="?chargeStation='"+chargeStation+"'&time='"+time+"'";
       //TODO:url
-      axios.get(url).then(function (res){
-        that.dayId=res.data.time;
-        that.dayPredict=res.data.predictSum;
-        that.dayActual=res.data.actualSum;
-        that.dayChart = echarts.init(document.getElementById('dayChart'));
-        that.dayOption.xAxis.data = that.dayId;
-        that.dayOption.title.text = '景区_季度周负荷预测';
-        var tempSeries=[
+      axios.get(url).then(function (res) {
+        that.dayId = res.data.time;
+        that.dayPredict = res.data.predictSum;
+        that.dayActual = res.data.actualSum;
+        that.chargeStationChart = echarts.init(document.getElementById('chargeStationChart'));
+        that.chargeStationOption.xAxis.data = that.dayId;
+        that.chargeStationOption.title.text = '充电站_充电负荷预测';
+        var tempSeries = [
           {
             name: 'actual',
             type: 'line',
@@ -337,18 +580,80 @@ export default {
             data: that.dayPredict
           }
         ];
-        that.dayOption.series = tempSeries;
-        that.dayChart.setOption(that.dayOption);
+        that.chargeStationOption.series = tempSeries;
+        that.chargeStationChart.setOption(that.chargeStationOption);
+
+      })
+
+    },
+
+    initCityAreaData() {
+      let that = this;
+      let url = "http://1.117.40.47:8082/app/v1/CityAreaPredict";
+      url+="?cityArea='上城区'&time='日'";
+      //TODO:url
+      axios.get(url).then(function (res) {
+        that.weekId = res.data.time;
+        that.weekPredict = res.data.predictSum;
+        that.weekActual = res.data.actualSum;
+        that.cityAreaChart = echarts.init(document.getElementById('cityAreaChart'));
+        that.cityAreaOption.xAxis.data = that.weekId;
+        that.cityAreaOption.title.text = '城区_充电负荷预测';
+        var tempSeries = [
+          {
+            name: 'actual',
+            type: 'line',
+            color: "blue",
+            data: that.weekActual
+          },
+          {
+            name: 'forcast',
+            type: 'line',
+            color: "red",
+            data: that.weekPredict
+          }
+        ];
+        that.cityAreaOption.series = tempSeries;
+        that.cityAreaChart.setOption(that.cityAreaOption);
+      })
+    },
+    initChargeStationData() {
+      let that = this;
+      let url = "http://1.117.40.47:8082/app/v1/DayPredictLoad";
+      url+=url+="?chargeStation='杭新景高速建德服务区充电站(衢州方向)'&time='日'";
+      //TODO:url
+      axios.get(url).then(function (res) {
+        that.dayId = res.data.time;
+        that.dayPredict = res.data.predictSum;
+        that.dayActual = res.data.actualSum;
+        that.chargeStationChart = echarts.init(document.getElementById('chargeStationChart'));
+        that.chargeStationOption.xAxis.data = that.dayId;
+        that.chargeStationOption.title.text = '充电站_充电负荷预测';
+        var tempSeries = [
+          {
+            name: 'actual',
+            type: 'line',
+            color: "blue",
+            data: that.dayActual
+          },
+          {
+            name: 'forcast',
+            type: 'line',
+            color: "red",
+            data: that.dayPredict
+          }
+        ];
+        that.chargeStationOption.series = tempSeries;
+        that.chargeStationChart.setOption(that.chargeStationOption);
 
       })
     },
-
     drawShape() {
-      this.seasonChart = echarts.init(document.getElementById('seasonChart'));
-      this.dayChart = echarts.init(document.getElementById('dayChart'));
+      this.cityAreaChart = echarts.init(document.getElementById('cityAreaChart'));
+      this.chargeStationChart = echarts.init(document.getElementById('chargeStationChart'));
 
-      this.seasonChart.setOption(this.seasonOption);
-      this.dayChart.setOption(this.dayOption);
+      this.cityAreaChart.setOption(this.cityAreaOption);
+      this.chargeStationChart.setOption(this.chargeStationOption);
     }
   }
 }
