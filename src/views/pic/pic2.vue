@@ -77,12 +77,12 @@ export default {
   data() {
     return {
       //数据
-      weekId: [],
-      weekPredict: [],
-      weekActual: [],
-      dayId: [],
-      dayPredict: [],
-      dayActual: [],
+      cityAreaId: [],
+      cityAreaPredict: [],
+      cityAreaReal: [],
+      chargeStationId: [],
+      chargeStationPredict: [],
+      chargeStationReal: [],
       //3个下拉框
       areaOption: [
         {
@@ -502,9 +502,9 @@ export default {
       },
 
       areaValue: '1',
-      timeValue: '2',
+      timeValue: '1',
       stationValue: '1',
-      timeValue2: '2'
+      timeValue2: '1'
     }
   },
   created() {
@@ -523,39 +523,36 @@ export default {
       let that = this;
       var cityArea= that.areaOption[that.areaValue-1].label;
       var time=that.timeOptions[that.timeValue-1].label;
-      // console.log(cityArea);
-      // console.log(time);
       let url="";
       if(time=="日")
       {
-        // console.log("yes");
-        url= "http://1.117.40.47:8082/app/v1/CityAreaPredict";
+        url= "http://112.124.59.163:8082/app/v1/CityAreaPredict/day/";
       }
       else
       {
-        url="http://1.117.40.47:8082/app/v1/CityAreaPredict";
+        url="http://112.124.59.163:8082/app/v1/CityAreaPredict/hour/";
       }
-      url+="?cityArea='"+cityArea;
+      url+=cityArea;
       //TODO:url
       axios.get(url).then(function (res) {
-        that.weekId = res.data.time;
-        that.weekPredict = res.data.predictSum;
-        that.weekActual = res.data.actualSum;
+        that.cityAreaId = res.data.time;
+        that.cityAreaPredict = res.data.predict;
+        that.cityAreaReal = res.data.real;
         that.cityAreaChart = echarts.init(document.getElementById('cityAreaChart'));
-        that.cityAreaOption.xAxis.data = that.weekId;
+        that.cityAreaOption.xAxis.data = that.cityAreaId;
         that.cityAreaOption.title.text = '城区_充电负荷预测';
         var tempSeries = [
           {
             name: 'actual',
             type: 'line',
             color: "blue",
-            data: that.weekActual
+            data: that.cityAreaReal
           },
           {
             name: 'forcast',
             type: 'line',
             color: "red",
-            data: that.weekPredict
+            data: that.cityAreaPredict
           }
         ];
         that.cityAreaOption.series = tempSeries;
@@ -568,38 +565,39 @@ export default {
       let that = this;
       var chargeStation= that.stationOptions[that.stationValue-1].label;
       var time=that.timeOptions[that.timeValue2-1].label;
+      console.log(chargeStation);
+      console.log(time);
 
       let url="";
       if(time=="日")
       {
-
-        url= "http://1.117.40.47:8082/app/v1/CityAreaPredict";
+        url= "http://112.124.59.163:8082/app/v1/StationPredict/day/";
       }
       else
       {
-        url="http://1.117.40.47:8082/app/v1/CityAreaPredict";
+        url="http://112.124.59.163:8082/app/v1/StationPredict/hour/";
       }
-      url+="?chargeStation='"+chargeStation+"'";
+      url+=chargeStation;
       //TODO:url
       axios.get(url).then(function (res) {
-        that.dayId = res.data.time;
-        that.dayPredict = res.data.predictSum;
-        that.dayActual = res.data.actualSum;
+        that.chargeStationId = res.data.time;
+        that.chargeStationPredict = res.data.predict;
+        that.chargeStationReal = res.data.real;
         that.chargeStationChart = echarts.init(document.getElementById('chargeStationChart'));
-        that.chargeStationOption.xAxis.data = that.dayId;
+        that.chargeStationOption.xAxis.data = that.chargeStationId;
         that.chargeStationOption.title.text = '充电站_充电负荷预测';
         var tempSeries = [
           {
             name: 'actual',
             type: 'line',
             color: "blue",
-            data: that.dayActual
+            data: that.chargeStationReal
           },
           {
             name: 'forcast',
             type: 'line',
             color: "red",
-            data: that.dayPredict
+            data: that.chargeStationPredict
           }
         ];
         that.chargeStationOption.series = tempSeries;
@@ -611,28 +609,28 @@ export default {
 
     initCityAreaData() {
       let that = this;
-      let url = "http://1.117.40.47:8082/app/v1/CityAreaPredict";
-      url+="?cityArea='上城区'";
+      let url = "http://112.124.59.163:8082/app/v1/CityAreaPredict/day/";
+      url+="上城区";
       //TODO:url
       axios.get(url).then(function (res) {
-        that.weekId = res.data.time;
-        that.weekPredict = res.data.predictSum;
-        that.weekActual = res.data.actualSum;
+        that.cityAreaId = res.data.time;
+        that.cityAreaPredict = res.data.predict;
+        that.cityAreaReal = res.data.real;
         that.cityAreaChart = echarts.init(document.getElementById('cityAreaChart'));
-        that.cityAreaOption.xAxis.data = that.weekId;
+        that.cityAreaOption.xAxis.data = that.cityAreaId;
         that.cityAreaOption.title.text = '城区_充电负荷预测';
         var tempSeries = [
           {
             name: 'actual',
             type: 'line',
             color: "blue",
-            data: that.weekActual
+            data: that.cityAreaReal
           },
           {
             name: 'forcast',
             type: 'line',
             color: "red",
-            data: that.weekPredict
+            data: that.cityAreaPredict
           }
         ];
         that.cityAreaOption.series = tempSeries;
@@ -641,28 +639,28 @@ export default {
     },
     initChargeStationData() {
       let that = this;
-      let url = "http://1.117.40.47:8082/app/v1/DayPredictLoad";
-      url+=url+="?chargeStation='杭新景高速建德服务区充电站(衢州方向)'";
+      let url = "http://112.124.59.163:8082/app/v1/StationPredict/day/";
+      url+="杭新景高速建德服务区充电站(衢州方向)";
       //TODO:url
       axios.get(url).then(function (res) {
-        that.dayId = res.data.time;
-        that.dayPredict = res.data.predictSum;
-        that.dayActual = res.data.actualSum;
+        that.chargeStationId = res.data.time;
+        that.chargeStationPredict = res.data.predict;
+        that.chargeStationReal = res.data.real;
         that.chargeStationChart = echarts.init(document.getElementById('chargeStationChart'));
-        that.chargeStationOption.xAxis.data = that.dayId;
+        that.chargeStationOption.xAxis.data = that.chargeStationId;
         that.chargeStationOption.title.text = '充电站_充电负荷预测';
         var tempSeries = [
           {
             name: 'actual',
             type: 'line',
             color: "blue",
-            data: that.dayActual
+            data: that.chargeStationReal
           },
           {
             name: 'forcast',
             type: 'line',
             color: "red",
-            data: that.dayPredict
+            data: that.chargeStationPredict
           }
         ];
         that.chargeStationOption.series = tempSeries;

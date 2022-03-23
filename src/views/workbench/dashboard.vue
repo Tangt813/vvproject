@@ -18,8 +18,6 @@
           </div>
         </div>
       </div>
-
-
     </div>
 
     <br>
@@ -457,8 +455,6 @@ export default {
           map.addOverlay(marker2);
         }
 
-        // this.top_bar(series_data1);
-        // this.addClickHandler(series_data1,series_data2,content,marker2);
       }
     }
   }
