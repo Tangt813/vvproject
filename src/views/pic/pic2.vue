@@ -1,9 +1,6 @@
 <template>
   <el-row class="wrap">
     <el-col :span="24" class="wrap-breadcrumb">
-      <!--      <el-breadcrumb seporate="/">-->
-      <!--        <el-breadcrumb-item :to="{ path: '/'}"><b>首页</b></el-breadcrumb-item>-->
-      <!--      </el-breadcrumb>-->
       <el-col :span="24" class="wrap-main">
         <section class="chart-container">
           <el-row>
@@ -71,6 +68,7 @@
 <script>
 import echarts from 'echarts'
 import axios from 'axios'
+import util from "../../common/util";
 
 export default {
 
@@ -362,7 +360,7 @@ export default {
           trigger: 'axis'
         },
         legend: {
-          data: ['actual', 'forcast'],
+          data: ['real', 'predict'],
           textStyle: {
             color: "black",
             fontSize: "15"
@@ -415,12 +413,12 @@ export default {
         },
         series: [
           {
-            name: 'actual',
+            name: 'real',
             type: 'line',
             color: "blue"
           },
           {
-            name: 'forcast',
+            name: 'predict',
             type: 'line',
             color: "red"
           }
@@ -434,7 +432,7 @@ export default {
           trigger: 'axis'
         },
         legend: {
-          data: ['actual', 'forcast'],
+          data: ['real', 'predict'],
           textStyle: {
             color: "black",
             fontSize: "15"
@@ -488,12 +486,12 @@ export default {
         },
         series: [
           {
-            name: 'actual',
+            name: 'real',
             type: 'line',
             color: "blue"
           },
           {
-            name: 'forcast',
+            name: 'predict',
             type: 'line',
             color: "red"
           }
@@ -526,11 +524,11 @@ export default {
       let url="";
       if(time=="日")
       {
-        url= "http://112.124.59.163:8082/app/v1/CityAreaPredict/day/";
+        url= util.pic2CityAreaDayUrl;
       }
       else
       {
-        url="http://112.124.59.163:8082/app/v1/CityAreaPredict/hour/";
+        url= util.pic2CityAreaHourUrl;
       }
       url+=cityArea;
       //TODO:url
@@ -543,13 +541,13 @@ export default {
         that.cityAreaOption.title.text = '城区_充电负荷预测';
         var tempSeries = [
           {
-            name: 'actual',
+            name: 'real',
             type: 'line',
             color: "blue",
             data: that.cityAreaReal
           },
           {
-            name: 'forcast',
+            name: 'predict',
             type: 'line',
             color: "red",
             data: that.cityAreaPredict
@@ -571,11 +569,11 @@ export default {
       let url="";
       if(time=="日")
       {
-        url= "http://112.124.59.163:8082/app/v1/StationPredict/day/";
+        url= util.pic2ChargeStationDayUrl;
       }
       else
       {
-        url="http://112.124.59.163:8082/app/v1/StationPredict/hour/";
+        url=util.pic2ChargeStationHourUrl;
       }
       url+=chargeStation;
       //TODO:url
@@ -588,13 +586,13 @@ export default {
         that.chargeStationOption.title.text = '充电站_充电负荷预测';
         var tempSeries = [
           {
-            name: 'actual',
+            name: 'real',
             type: 'line',
             color: "blue",
             data: that.chargeStationReal
           },
           {
-            name: 'forcast',
+            name: 'predict',
             type: 'line',
             color: "red",
             data: that.chargeStationPredict
@@ -609,7 +607,7 @@ export default {
 
     initCityAreaData() {
       let that = this;
-      let url = "http://112.124.59.163:8082/app/v1/CityAreaPredict/day/";
+      let url = util.pic2CityAreaDayUrl;
       url+="上城区";
       //TODO:url
       axios.get(url).then(function (res) {
@@ -621,13 +619,13 @@ export default {
         that.cityAreaOption.title.text = '城区_充电负荷预测';
         var tempSeries = [
           {
-            name: 'actual',
+            name: 'real',
             type: 'line',
             color: "blue",
             data: that.cityAreaReal
           },
           {
-            name: 'forcast',
+            name: 'predict',
             type: 'line',
             color: "red",
             data: that.cityAreaPredict
@@ -639,7 +637,7 @@ export default {
     },
     initChargeStationData() {
       let that = this;
-      let url = "http://112.124.59.163:8082/app/v1/StationPredict/day/";
+      let url = "";
       url+="杭新景高速建德服务区充电站(衢州方向)";
       //TODO:url
       axios.get(url).then(function (res) {
@@ -651,13 +649,13 @@ export default {
         that.chargeStationOption.title.text = '充电站_充电负荷预测';
         var tempSeries = [
           {
-            name: 'actual',
+            name: 'real',
             type: 'line',
             color: "blue",
             data: that.chargeStationReal
           },
           {
-            name: 'forcast',
+            name: 'predict',
             type: 'line',
             color: "red",
             data: that.chargeStationPredict

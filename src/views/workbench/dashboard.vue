@@ -60,6 +60,7 @@
 <script>
 import echarts from 'echarts'
 import BMap from 'BMap'
+import util from '../../common/util'
 
 export default {
   mounted() {
@@ -197,7 +198,7 @@ export default {
       map.enableScrollWheelZoom();
 
       //只显示某个省份的关键代码
-      var cityName = '杭州市';
+      var cityName = util.cityName;
       //添加缩略地图控件
       map.addControl(new BMap.OverviewMapControl());
       map.addControl(new BMap.NavigationControl({
